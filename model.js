@@ -12,7 +12,7 @@ function loadData() {
 // Buat fungsi untuk load data disini
 async function loadModel(){
   console.log('loading model...');
-  model = await tf.loadModel(
+  model = await tf.loadLayersModel(
     'file://${__dirname}/model/model.json',
     false
   );
@@ -30,6 +30,7 @@ exports.recommend = async function recommend(userId){
   await loadModel();
   console.log('Recommending for User: ${userId}');
   pred_tensor = await model.predict([movie_arr, user]).reshape([movie_len]);
+  pred = pred_tensor.arraySync();
 
   let recommendations = [];
   for(let i = 0; i < 6; i++){
